@@ -4,7 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using CretaceousPark.Models;
+using LittleReaders.Models;
+using Microsoft.OpenApi.Models; // for swagger
+using System.IO; //for using Path
+using System; //for using AppContext.
 
 namespace LittleReaders.Solution
 {
@@ -24,9 +27,10 @@ namespace LittleReaders.Solution
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
 
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LittleReaders.Solution", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LittleReaders.Solution", Version = "v1", Description = "API for returning Books and Related data" });
             });
         }
 
