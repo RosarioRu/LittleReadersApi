@@ -31,7 +31,23 @@ namespace LittleReaders.Controllers
       _db.Books.Add(book);
       await _db.SaveChangesAsync();
 
-      return CreatedAtAction("Post", new { id = book.BookId }, book);
+      return CreatedAtAction(nameOf(GetBook), new { id = book.BookId }, book);
     }
+
+    //Get api/books/1
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Book>> GetBook(int id)
+    {
+      var book = await _db.Books.FindAsync(id);
+
+      if (book == null)
+      {
+        return NotFound();
+      }
+
+      return book;
+    }
+
+
   }
 }
