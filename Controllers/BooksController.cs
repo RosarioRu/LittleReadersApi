@@ -1,8 +1,16 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+// using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LittleReaders.Models;
+using Microsoft.EntityFrameworkCore;
+
+
+
+
 
 namespace LittleReaders.Controllers
 {
@@ -31,7 +39,7 @@ namespace LittleReaders.Controllers
       _db.Books.Add(book);
       await _db.SaveChangesAsync();
 
-      return CreatedAtAction(nameOf(GetBook), new { id = book.BookId }, book);
+      return CreatedAtAction(nameof(GetBook), new { id = book.BookId }, book);
     }
 
     //Get api/books/1
@@ -48,6 +56,42 @@ namespace LittleReaders.Controllers
       return book;
     }
 
+    // Put api/books/1
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Put(int id, Book book)
+    {
+      if (id != book.BookId)
+      {
+        return BadRequest();
+      }
+
+      _db.Entry(book).State = EntityState.Modified;
+
+
+      try
+      {
+        await _db.SaveChangesAsync();
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        if (!BookExists(id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
+
+      return NoContent();
+    }
+
+
+    private bool BookExists(int id)
+    {
+      return _db.Books.Any(e => e.BookId == id);
+    }
 
   }
 }
