@@ -26,6 +26,10 @@ namespace LittleReaders.Solution
             services.AddDbContext<LittleReadersContext>(opt =>
                 opt.UseMySql(Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(Configuration["ConnectionStrings:DefaultConnection"])));
 
+            services.AddControllers().AddNewtonsoftJson(); //added newtonJson to to use Patch
+
+
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
