@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.JsonPatch;
 
 namespace LittleReaders.Controllers
 {
+  [Produces("application/json")]
   [Route("api/[controller]")]
   [ApiController]
   public class BooksController : ControllerBase
@@ -27,6 +28,8 @@ namespace LittleReaders.Controllers
     }
 
     // GET api/books
+    ///<summary>Returns a list of all the Books in the database, or only those that meet search criteria when it is provided</summary>
+    ///<returns>A list of Parks</returns>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Book>>> Get()
     {
@@ -88,6 +91,9 @@ namespace LittleReaders.Controllers
       return NoContent();
     }
 
+
+    // patch api/books/{id}
+    ///<summary>Partially updates a specific Book</summary>
     [HttpPatch("{id}")]
     public async Task<IActionResult> Patch(int id, [FromBody] JsonPatchDocument<Book> patchBookToPatch)
     {
