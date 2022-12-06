@@ -9,7 +9,8 @@ using Microsoft.OpenApi.Models; // for swagger
 using System.IO; //for using Path
 using System; //for using AppContext.
 
-namespace LittleReaders.Solution
+namespace LittleReaders
+// namespace LittleReaders.Solution 
 {
     public class Startup
     {
@@ -28,13 +29,20 @@ namespace LittleReaders.Solution
 
             services.AddControllers().AddNewtonsoftJson(); //added newtonJson to to use Patch
 
-
-
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LittleReaders.Solution", Version = "v1", Description = "API for returning Books and Related data" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                  Title = "LittleReaders", 
+                  Version = "v1", 
+                  Description = "API for returning Books and Related data" 
+                });
+
+               //attempting to add xml comments to swagger, below we tell it to use xml file 
+                var filePath = Path.Combine(AppContext.BaseDirectory, "LittleReaders.Solution.xml");
+                c.IncludeXmlComments(filePath);
             });
         }
 
