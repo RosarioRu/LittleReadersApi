@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LittleReaders.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.JsonPatch;
 
 
 
@@ -86,6 +87,25 @@ namespace LittleReaders.Controllers
 
       return NoContent();
     }
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Patch(int id, [FromBody] JsonPatchDocument<Book> patchBookToPatch)
+    {
+      var bookToPatch = _db.Books.FirstOrDefault(e => e.BookId == id);
+
+      if (bookToPatch == null)
+      {
+        return NotFound();
+      }
+
+      patchBookToPatch.ApplyTo(bookToPatch, ModelState);
+      
+      _db.Entry(bookToPatch).State = EntityState.Modified;
+      await _db.SaveChangesAsync();
+    
+      return Ok(bookToPatch);
+    }
+
 
 
     private bool BookExists(int id)
